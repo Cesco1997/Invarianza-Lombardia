@@ -33,7 +33,7 @@ st.set_page_config(
 #set_background("background.jpg")  
 
 # === CONFIG ===
-GOOGLE_MAPS_API_KEY = "AIzaSyCgCQIXGAonp2_HnF091U5Iw5WrfUUN08k"
+GOOGLE_MAPS_API_KEY = 
 file_path = "Comuni_criticita_idraulica.xlsx"
 df_comuni = pd.read_excel(file_path)
 
