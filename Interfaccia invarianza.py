@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd 
 import numpy as np 
-import base64
+#import base64
 
 # Layout pagina 
 st.set_page_config(
@@ -11,26 +11,26 @@ st.set_page_config(
     layout="centered"
 )
 
-def set_background(image_file_path):
-    with open(image_file_path, "rb") as image_file:
-        encoded = base64.b64encode(image_file.read()).decode()
-
-    st.markdown(
-        f"""
-        <style>
-        body {{
-            background-image: url("data:image/jpg;base64,{encoded}");
-             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-set_background("background.jpg")  
+#def set_background(image_file_path):
+#    with open(image_file_path, "rb") as image_file:
+#        encoded = base64.b64encode(image_file.read()).decode()
+#
+#    st.markdown(
+#        f"""
+#        <style>
+#        body {{
+#            background-image: url("data:image/jpg;base64,{encoded}");
+#             background-size: cover;
+#            background-position: center;
+#            background-repeat: no-repeat;
+#            background-attachment: fixed;
+#        }}
+#        </style>
+#        """,
+#        unsafe_allow_html=True
+#    )
+#
+#set_background("background.jpg")  
 
 # === CONFIG ===
 GOOGLE_MAPS_API_KEY = "AIzaSyCgCQIXGAonp2_HnF091U5Iw5WrfUUN08k"
