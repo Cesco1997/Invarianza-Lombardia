@@ -34,7 +34,7 @@ st.set_page_config(
 #set_background("background.jpg")  
 
 # === CONFIG ===
-st.write(os.environ)
+#st.write(os.environ)
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
 if not GOOGLE_MAPS_API_KEY:
