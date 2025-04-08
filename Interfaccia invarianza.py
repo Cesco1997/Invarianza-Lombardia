@@ -36,7 +36,7 @@ st.set_page_config(
 # === CONFIG ===
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
-if not api_key:
+if not GOOGLE_MAPS_API_KEY:
     st.error("API key non trovata")
     
 file_path = "Comuni_criticita_idraulica.xlsx"
