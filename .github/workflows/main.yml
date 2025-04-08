@@ -1,4 +1,4 @@
-name: Run Streamlit App
+name: Deploy Streamlit App
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -14,13 +15,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Streamlit
+      - name: Run Streamlit App
         env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
-          streamlit run app.py
+          echo "✅ API key visibile? $GOOGLE_MAPS_API_KEY"
+          streamlit run "Interfaccia invarianza.py"
