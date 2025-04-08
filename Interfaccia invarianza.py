@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np 
 #import base64
 
+st.write(os.environ)
+
 # Layout pagina 
 st.set_page_config(
     page_title="Calcolo invarianza Lombardia",
