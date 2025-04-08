@@ -5,8 +5,6 @@ import pandas as pd
 import numpy as np 
 #import base64
 
-st.write(os.environ)
-
 # Layout pagina 
 st.set_page_config(
     page_title="Calcolo invarianza Lombardia",
@@ -36,6 +34,7 @@ st.set_page_config(
 #set_background("background.jpg")  
 
 # === CONFIG ===
+st.write(os.environ)
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
 if not GOOGLE_MAPS_API_KEY:
