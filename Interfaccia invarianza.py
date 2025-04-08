@@ -30,11 +30,11 @@ def set_background(image_file_path):
         unsafe_allow_html=True
     )
 
-set_background("C:/Users/Francesco/Daku 2025/Invarianza/1-Lombardia/App invarianza/background.jpg")  
+set_background("background.jpg")  
 
 # === CONFIG ===
 GOOGLE_MAPS_API_KEY = "AIzaSyCgCQIXGAonp2_HnF091U5Iw5WrfUUN08k"
-file_path = "C:/Users/Francesco/Daku 2025/Invarianza/1-Lombardia/Comuni_criticita_idraulica.xlsx"
+file_path = "Comuni_criticita_idraulica.xlsx"
 df_comuni = pd.read_excel(file_path)
 
 # === SESSION STATE INIT ===
