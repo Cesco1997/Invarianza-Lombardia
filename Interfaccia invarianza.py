@@ -1,8 +1,14 @@
 import streamlit as st
 import requests
-import os
 import pandas as pd 
 import numpy as np 
+import base64
+import folium 
+from streamlit_folium import st_folium
+import smtplib
+from email.message import EmailMessage
+from datetime import datetime
+
 #import base64
 
 # Layout pagina 
