@@ -185,7 +185,7 @@ with st.form("form_dati"):
         st.markdown("<div style='text-align: center; padding-top: 2.5em;'>di cui</div>", unsafe_allow_html=True)
     with col3:
         sup_verde = st.number_input("Superficie verde pensile (mq)", min_value=0.0, step=1.0)
-    st.caption("Es: giardini pensili, pavimentazioni dreananti o semipermeabili di strade, vialetti e parcheggi")
+    st.caption("Es: giardini pensili, pavimentazioni drenanti o semipermeabili di strade, vialetti e parcheggi")
     sup_perm = st.number_input("Superficie permeabile (mq)", min_value=0.0, step=1.0)
     st.caption("Es: aree verdi. Da NON considerare aree ad uso agricolo e superfici incolte")
     check_portata = st.checkbox("**Portata massima ammissibile per ettaro nota**")
