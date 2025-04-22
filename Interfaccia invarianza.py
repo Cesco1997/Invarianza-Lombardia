@@ -137,7 +137,15 @@ def determina_modalita(phi, superficie, area):
         return "Requisiti minimi (art. 12, comma 2)" if area == "C" else "Procedura dettagliata (art. 11 e Allegato G)"
 
 def invaso_minimo(area):
-    return 800 if area == "A" else 500 if area == "B" else 400
+    if area == "A":
+        return 800
+    elif area == "B":
+        return 500
+    elif area == "C":
+        return 400
+    
+def altezza_vasca_in_cm(volume, superficie):
+    return round(100*volume / superficie, 2)
 
 def crea_df_parametri(comune, a1, n, alpha, kappa, epsilon):
     df_parametri = pd.DataFrame({
@@ -273,7 +281,7 @@ if st.session_state.method == "Procedura dettagliata (art. 11 e Allegato G)":
     st.session_state.method_2 = "True"
 
 elif st.session_state.method.startswith("Requisiti minimi"):
-    volume = round(0.0001 * st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.method), 2)
+    volume = round(0.0001 * st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.dati_comune["Criticità idraulica"]), 2)
     st.write(f"**Volume da laminare:** {volume} mc")
     st.write(f"**Altezza vasca laminazione:** {round(volume / st.session_state.sup_verde, 2)} cm")
     st.session_state.method_2 = "True"
@@ -310,17 +318,18 @@ elif st.session_state.method == "Metodo delle sole piogge (art. 11 e Allegato G)
 
         if submitted_2:
             wT = epsilon + alpha / k * (1 - (np.log(T_ritorno / (T_ritorno - 1))) ** k)
-            TempoCritico = round(st.session_state.ULim / (2.78 * st.session_state.phi * wT * A1 * n) ** (1 / (n - 1)), 2)
+            TempoCritico = round((st.session_state.ULim / (2.78 * st.session_state.phi * wT * A1 * n) )** (1 / (n - 1)), 2)
             Precipitazione = wT * A1 * TempoCritico ** n
-            volume = round(0.0001 * (10 * st.session_state.sup_tot * st.session_state.phi * wT * TempoCritico ** n - 3.6 * st.session_state.sup_tot * st.session_state.ULim * TempoCritico), 2)
-            volume_minimo = round(0.0001 * st.session_state.coeff_P * (st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.method)), 2)
-
+            #volume = round(0.0001 * (10 * st.session_state.sup_tot * st.session_state.phi * wT * TempoCritico ** n - 3.6 * st.session_state.sup_tot * st.session_state.ULim * TempoCritico), 2)
+            volume = round(0.0001 * st.session_state.sup_tot* (10 * st.session_state.phi * wT * A1 * TempoCritico ** n - 3.6 * st.session_state.ULim * TempoCritico), 2)
+            volume_minimo = round(0.0001 * st.session_state.coeff_P * st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.dati_comune["Criticità idraulica"]), 2)
+            
             if volume_minimo > volume:
                 st.markdown("<div style='font-size:22px; margin-bottom:24px;'> Metodo utilizzato: <span style='color:red; font-weight:bold;'>Requisiti minimi (art. 12, comma 2)</span></div>",
                     unsafe_allow_html=True
                 )
                 st.write(f"**Volume da laminare:** {volume_minimo} mc")
-                st.write(f"**Altezza vasca laminazione:** {round(volume_minimo / st.session_state.sup_verde, 2)} cm")
+                st.write(f"**Altezza vasca laminazione:** {altezza_vasca_in_cm(volume_minimo, st.session_state.sup_verde)} cm")
 
                 # Salvataggio in sessione
                 st.session_state.update({
@@ -334,13 +343,13 @@ elif st.session_state.method == "Metodo delle sole piogge (art. 11 e Allegato G)
                 )
                 st.write(f"**Durata critica:** {TempoCritico} ore")
                 st.write(f"**Volume da laminare:** {volume} mc")
-                st.write(f"**Altezza vasca laminazione:** {round(volume / st.session_state.sup_verde, 2)} cm")
+                st.write(f"**Altezza vasca laminazione:** {altezza_vasca_in_cm(volume, st.session_state.sup_verde)} cm")
 
                 # Salvataggio in sessione
                 st.session_state.update({
                     "T_ritorno": T_ritorno,
                     "volume": volume,
-                    "altezza_vasca": round(volume / st.session_state.sup_verde, 2),
+                    "altezza_vasca": altezza_vasca_in_cm(volume, st.session_state.sup_verde),
                 })
 
             st.session_state.method_2 = "True"
@@ -359,23 +368,24 @@ elif st.session_state.method == "Metodo delle sole piogge (art. 11 e Allegato G)
             epsilon = st.session_state.dati_comune["epsilon"]
 
             wT = epsilon + alpha / k * (1 - (np.log(T_ritorno / (T_ritorno - 1))) ** k)
-            TempoCritico = round(st.session_state.ULim / (2.78 * st.session_state.phi * wT * A1 * n) ** (1 / (n - 1)), 2)
+            TempoCritico = round((st.session_state.ULim / (2.78 * st.session_state.phi * wT * A1 * n) )** (1 / (n - 1)), 2)
             Precipitazione = wT * A1 * TempoCritico ** n
             volume = round(0.0001 * (10 * st.session_state.sup_tot * st.session_state.phi * wT * TempoCritico ** n - 3.6 * st.session_state.sup_tot * st.session_state.ULim * TempoCritico), 2)
-            volume_minimo = round(0.0001 * st.session_state.coeff_P * (st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.method)), 2)
+            volume = round(0.0001 * st.session_state.sup_tot* (10 * st.session_state.phi * wT * A1 * TempoCritico ** n - 3.6 * st.session_state.ULim * TempoCritico), 2)
+            volume_minimo = round(0.0001 * st.session_state.coeff_P * st.session_state.phi * st.session_state.sup_tot * invaso_minimo(st.session_state.dati_comune["Criticità idraulica"]), 2)
 
             if volume_minimo > volume:
                 st.markdown("<div style='font-size:22px; margin-bottom:24px;'> Metodo utilizzato: <span style='color:red; font-weight:bold;'>Requisiti minimi (art. 12, comma 2)</span></div>",
                     unsafe_allow_html=True
                 )
                 st.write(f"**Volume da laminare:** {volume_minimo} mc")
-                st.write(f"**Altezza vasca laminazione:** {round(volume_minimo / st.session_state.sup_verde, 2)} cm")
+                st.write(f"**Altezza vasca laminazione:** {altezza_vasca_in_cm(volume_minimo, st.session_state.sup_verde)} cm")
 
                 # Salvataggio in sessione
                 st.session_state.update({
                     "T_ritorno": T_ritorno,
                     "volume": volume_minimo,
-                    "altezza_vasca": round(volume_minimo / st.session_state.sup_verde, 2),
+                    "altezza_vasca": altezza_vasca_in_cm(volume_minimo, st.session_state.sup_verde),
                 })
             else:
                 st.markdown("<div style='font-size:22px; margin-bottom:24px;'> Metodo utilizzato: <span style='color:red; font-weight:bold;'>Metodo delle sole piogge (art. 11 e Allegato G)</span></div>",
@@ -383,13 +393,13 @@ elif st.session_state.method == "Metodo delle sole piogge (art. 11 e Allegato G)
                 )
                 st.write(f"**Durata critica:** {TempoCritico} ore")
                 st.write(f"**Volume da laminare:** {volume} mc")
-                st.write(f"**Altezza vasca laminazione:** {round(volume / st.session_state.sup_verde, 2)} cm")
+                st.write(f"**Altezza vasca laminazione:** {altezza_vasca_in_cm(volume, st.session_state.sup_verde)} cm")
 
                 # Salvataggio in sessione
                 st.session_state.update({
                     "T_ritorno": T_ritorno,
                     "volume": volume,
-                    "altezza_vasca": round(volume / st.session_state.sup_verde, 2),
+                    "altezza_vasca": altezza_vasca_in_cm(volume, st.session_state.sup_verde),
                 })
 
             st.session_state.method_2 = "True"
